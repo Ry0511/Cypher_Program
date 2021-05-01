@@ -1,4 +1,4 @@
-package sample;
+package CypherGram.transposition.Utility;
 
 import java.util.NoSuchElementException;
 

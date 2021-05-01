@@ -8,13 +8,8 @@
  */
 
  .root {
- 	    -fx-focused-text-base-color : ladder(
-            -fx-selection-bar,
-            -fx-light-text-color 45%,
-            -fx-dark-text-color 46%,
-            -fx-dark-text-color 59%,
-            -fx-mid-text-color 60%
-        );
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: #B47AEA;
  }
 /*--  TAB HORIZONTAL STRIP BG  --*/
 .tab-pane *.tab-header-area *.tab-header-background {
@@ -99,14 +94,25 @@
 
 /*----    CHECKBOX STYLE    ----*/
 .check-box {
+	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 	-fx-text-fill: white;
 }
 
-.check-box:hover {
+.check-box:hover { 
 	-fx-font-family: "Arial";
 	-fx-font-weight: bolder;
-	-fx-text-fill: white;
+}
+
+.check-box .box {
+    -fx-border-width: 1,1,1,1;
+    -fx-border-color: transparent;
+	-fx-background-color: #2d2d2d;
+}
+
+.check-box .box:hover {
+	-fx-border-radius: 3px;
+    -fx-border-color: #B47AEA;
 }
 
 
@@ -220,10 +226,18 @@
 }
 
 .gridBox:hover {
-	-fx-border-color: #F7FFF7;
+	-fx-border-color: #2d2d2d;
 }
 
 .gridBox Line {
 	-fx-background-color: #2d2d2d;
 	-fx-stroke: lime;
+}
+
+/*----    GENERIC STYLING    ----*/
+#limeBorder {
+	-fx-border-color: lime;
+}
+#borderRadius {
+	-fx-border-radius: 6px;
 }

@@ -1,23 +1,31 @@
-package sample;
+package CypherGram;
 
-import com.sun.javafx.collections.MappingChange;
-import com.sun.javafx.util.Utils;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import CypherGram.transposition.Utility.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+
 /**
  * Controller class for the Transposition Cipher program. This code is messy
  * and needs a clean up but, this project itself was just a learning
@@ -27,7 +35,7 @@ import java.util.Set;
  * @version 0.3
  * Copyright: N/A
  */
-public class Controller {
+public class TranspositionEncrypt {
     private static final String GO_ERROR_TITLE = "Go! Failed!";
     private static final String GO_ERROR_HEADER = "Go failed to proceed.";
     private static final String GO_ERROR_MESSAGE = "One or more of the "
@@ -38,6 +46,8 @@ public class Controller {
             + " ((Row, Col) Indexes from Zero, Top left is 0, 0)";
 
     private final HashMap<Label, LabelProperties> labelStates = new HashMap<>();
+    @FXML
+    private Button decryptButton;
     @FXML
     private Label cypherTextLabel;
     @FXML
@@ -59,32 +69,6 @@ public class Controller {
     private StringIterator cypher;
     private GridPath<Label> path;
     private ArrayList<Label> gridLabels;
-
-    /**
-     * Displays an information error message to the screen using the provided
-     * Strings for the content to be displayed.
-     *
-     * @param title   Title of the Alert Container.
-     * @param header  Header text for the Alert Container.
-     * @param message Message/content to be displayed.
-     */
-    private static void alertUser(final String title, final String header,
-                                  final String message) {
-        Alert e = new Alert(Alert.AlertType.INFORMATION);
-        e.setTitle(title);
-        e.setHeaderText(header);
-        e.setContentText(message);
-
-        DialogPane dialogPane = e.getDialogPane();
-        dialogPane.getStylesheets()
-                .add(Controller.class
-                        .getResource("style.css")
-                        .toExternalForm());
-        dialogPane.getStyleClass().add("myDialog");
-
-        e.setResizable(true);
-        e.showAndWait();
-    }
 
     /**
      * Event listener attached to all Labels on the GridBox. Upon clicked this
@@ -131,7 +115,7 @@ public class Controller {
             //Path must come before labels
             updatePath(s, false);
         }
-        updateLabels(s);
+        updateLabels();
         labelStates.get(s).setClickedState(!labelStates.get(s)
                 .getClickedState());
     }
@@ -140,14 +124,12 @@ public class Controller {
      * Makes a call to update the {@link #cypherTextLabel} and the
      * {@link #previousCoordinateLabel} to accommodate the program state change.
      *
-     * @param trigger Label which triggered the program state change (used to
-     *                know what to change)
      */
-    private void updateLabels(Label trigger) {
+    private void updateLabels() {
         //Cypher, Previous Co-ords
         updateCypherLabel();
         if (path.getPath().size() > 1) {
-            updatePrevCoordLabel(trigger);
+            updatePrevCoordLabel();
         }
     }
 
@@ -169,7 +151,7 @@ public class Controller {
     /**
      *
      */
-    private void updatePrevCoordLabel(Label trigger) {
+    private void updatePrevCoordLabel() {
         Coordinates<Label> prev = path.getPath().get(path.length() - 1);
         previousCoordinateLabel.setText(prev.toString());
     }
@@ -230,12 +212,11 @@ public class Controller {
 
     /**
      * On button pressed this method will populate a grid with labels ready
-     * to be pressed for a transposition cypher.
+     * to be pressed for a transposition cypher if the program state is ready
+     * to do that.
      *
-     * @param event Action event tied to a button, fired from a listener.
-     *              Attached to this is the object that triggered the event.
      */
-    public void goButton(ActionEvent event) {
+    public void goButton() {
         //Case the program state is ready
         if (isGoReady()) {
             cypher = new StringIterator(cypherText.getText());
@@ -256,7 +237,9 @@ public class Controller {
             String message = String.format(GO_ERROR_MESSAGE,
                     cypherText.getText(), padText.getText(),
                     rowText.getText());
-            alertUser(GO_ERROR_TITLE, GO_ERROR_HEADER, message);
+            final String cssFile = "style.css";
+            SceneUtils.alertUser(GO_ERROR_TITLE, GO_ERROR_HEADER, message,
+                    this.getClass().getResource(cssFile));
         }
     }
 
@@ -361,7 +344,7 @@ public class Controller {
     /**
      *
      */
-    public void fullPathPressed(ActionEvent event) {
+    public void fullPathPressed() {
         final String textBase = "(%s, %s)";
 
         StringBuilder output = new StringBuilder();
@@ -376,8 +359,9 @@ public class Controller {
             }
             count++;
         }
-        System.out.println(output.toString());
-        alertUser(PATH_TITLE, PATH_HEADER, output.toString());
+        final String cssFile = "style.css";
+        SceneUtils.alertUser(PATH_TITLE, PATH_HEADER, output.toString(),
+                this.getClass().getResource(cssFile));
     }
 
     /**
@@ -390,5 +374,26 @@ public class Controller {
         final ClipboardContent content = new ClipboardContent();
         content.putString(temp.getText());
         clipboard.setContent(content);
+    }
+
+    /**
+     * Loads an Application Stage over the main stage that being the
+     * Decryption stage.
+     *
+     * @throws IOException if the FXML file is missing or could not be parsed.
+     */
+    public void decryptBoard() throws IOException {
+        //Stage data
+        final String title = "Decrypt Transposition";
+        final String fxml = "transposition/decrypt/decryptPage.fxml";
+        final Parent root = FXMLLoader.load(getClass().getResource(fxml));
+
+        //Stage setup
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle(title);
+        stage.setScene(scene);
+        stage.show();
     }
 }

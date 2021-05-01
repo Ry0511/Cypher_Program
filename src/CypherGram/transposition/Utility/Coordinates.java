@@ -1,4 +1,4 @@
-package sample;
+package CypherGram.transposition.Utility;
 
 /**
  * Co-ordinate value object which allows for the storage of abstract integers

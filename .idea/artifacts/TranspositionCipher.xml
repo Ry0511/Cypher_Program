@@ -14,7 +14,7 @@
     </properties>
     <root id="root">
       <element id="archive" name="JavaFX_Autosize_Elements.jar">
-        <element id="module-output" name="JavaFX Autosize Elements" />
+        <element id="module-output" name="CypherGram" />
       </element>
     </root>
   </artifact>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JavaFX Autosize Elements.iml" filepath="$PROJECT_DIR$/JavaFX Autosize Elements.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CypherGram.iml" filepath="$PROJECT_DIR$/CypherGram.iml" />
     </modules>
   </component>
 </project>
