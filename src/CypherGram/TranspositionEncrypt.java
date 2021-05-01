@@ -266,7 +266,9 @@ public class TranspositionEncrypt {
 
         //Ensure digits only for row content (size is irrelevant since it
         // expects at least one digit.)
-        boolean c = rowText.getText().matches("\\d+");
+        boolean c =
+                rowText.getText().matches("\\d+")
+                        && !rowText.getText().equals("0");
 
         return a && b && c;
     }
