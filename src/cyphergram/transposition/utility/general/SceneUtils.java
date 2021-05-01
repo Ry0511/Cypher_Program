@@ -1,4 +1,4 @@
-package CypherGram.transposition.Utility;
+package cyphergram.transposition.utility.general;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
@@ -9,10 +9,10 @@ import java.net.URL;
  * Utility class designed to deal with displaying and handling scene updates
  * such as Alert Messages.
  */
-public class SceneUtils {
+public final class SceneUtils {
 
     /**
-     * Hide constructor for utility class
+     * Hide constructor for utility class.
      */
     private SceneUtils() {
 
@@ -24,6 +24,7 @@ public class SceneUtils {
      * @param title   Title of the Alert Container.
      * @param header  Header text for the Alert Container.
      * @param message Message/content to be displayed.
+     * @param cssFile The Style file to use for the created Alert window.
      */
     public static void alertUser(final String title, final String header,
                                  final String message, final URL cssFile) {

@@ -1,4 +1,4 @@
-package CypherGram.transposition.Utility;
+package cyphergram.transposition.utility.encrypt;
 
 /**
  * Co-ordinate value object which allows for the storage of abstract integers

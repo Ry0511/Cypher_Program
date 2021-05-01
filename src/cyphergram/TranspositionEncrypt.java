@@ -1,5 +1,10 @@
-package CypherGram;
+package cyphergram;
 
+import cyphergram.transposition.utility.general.SceneUtils;
+import cyphergram.transposition.utility.encrypt.Coordinates;
+import cyphergram.transposition.utility.encrypt.GridPath;
+import cyphergram.transposition.utility.encrypt.LabelProperties;
+import cyphergram.transposition.utility.encrypt.StringIterator;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +24,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import CypherGram.transposition.Utility.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

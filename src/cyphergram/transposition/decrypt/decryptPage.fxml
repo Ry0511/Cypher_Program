@@ -5,17 +5,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane id="anchorPane" stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CypherGram.transposition.decrypt.TranspositionDecrypt">
+<BorderPane id="anchorPane" stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyphergram.transposition.decrypt.TranspositionDecrypt">
    <top>
-      <FlowPane id="flowPane" alignment="CENTER" columnHalignment="CENTER" hgap="12.0" prefWrapLength="880.0" BorderPane.alignment="CENTER">
+      <FlowPane id="flowPane" alignment="CENTER" columnHalignment="CENTER" hgap="12.0" prefHeight="30.0" prefWrapLength="880.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <children>
-            <TextField fx:id="cypherText" alignment="CENTER"
-                       prefHeight="28.0" prefWidth="270.0" promptText="Cypher Text">
+            <TextField fx:id="cypherText" alignment="CENTER" prefHeight="28.0" prefWidth="270.0" promptText="Cypher Text">
                <FlowPane.margin>
-                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </FlowPane.margin>
             </TextField>
             <TextField fx:id="padKey" onKeyTyped="#padKeyUpdated" prefWidth="110.0" promptText="Pad Key" />
@@ -24,12 +23,11 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <FlowPane.margin>
-                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </FlowPane.margin>
             </TextField>
-            <CheckBox fx:id="invertKeyBox" mnemonicParsing="false"
-                      text="Invert Key" textAlignment="CENTER" />
-            <Region prefHeight="48.0" prefWidth="158.0" />
+            <CheckBox fx:id="invertKeyBox" mnemonicParsing="false" text="Invert Key" textAlignment="CENTER" />
+            <Region prefWidth="158.0" />
             <Button fx:id="goButton" alignment="CENTER" mnemonicParsing="false" onAction="#goButtonPressed" text="Go!" textAlignment="CENTER" />
          </children>
          <styleClass>
@@ -46,7 +44,7 @@
       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
    </padding>
    <bottom>
-      <FlowPane id="flowPane" alignment="CENTER" columnHalignment="CENTER" hgap="6.0" prefHeight="60.0" prefWidth="200.0" prefWrapLength="880.0" vgap="6.0" BorderPane.alignment="CENTER">
+      <FlowPane id="flowPane" alignment="CENTER" columnHalignment="CENTER" hgap="6.0" prefHeight="40.0" prefWidth="200.0" prefWrapLength="880.0" vgap="6.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </BorderPane.margin>
@@ -57,9 +55,9 @@
       </FlowPane>
    </bottom>
    <center>
-      <AnchorPane id="anchorPane" BorderPane.alignment="CENTER">
+      <AnchorPane id="flowPane" BorderPane.alignment="CENTER">
          <children>
-            <GridPane fx:id="gridBox" alignment="CENTER" gridLinesVisible="true" layoutX="24.0" layoutY="11.0" prefHeight="496.0" prefWidth="869.0" styleClass="gridBox" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <GridPane fx:id="gridBox" alignment="CENTER" gridLinesVisible="true" hgap="8.0" layoutY="14.0" prefHeight="500.0" prefWidth="870.0" styleClass="gridBox" vgap="8.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" />
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" />
@@ -69,13 +67,16 @@
                 <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
                 <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
               </rowConstraints>
+               <padding>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </padding>
             </GridPane>
          </children>
          <BorderPane.margin>
-            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </BorderPane.margin>
          <padding>
-            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </padding>
       </AnchorPane>
    </center>

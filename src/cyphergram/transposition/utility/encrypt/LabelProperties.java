@@ -1,4 +1,4 @@
-package CypherGram.transposition.Utility;
+package cyphergram.transposition.utility.encrypt;
 /**
  * Label State properties to define extra properties to a label and store
  * them, does so without the label needing to be provided.

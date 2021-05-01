@@ -1,4 +1,4 @@
-package CypherGram.transposition.Utility;
+package cyphergram.transposition.utility.encrypt;
 
 import java.util.NoSuchElementException;
 

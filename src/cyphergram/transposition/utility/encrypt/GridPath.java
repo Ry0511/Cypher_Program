@@ -1,4 +1,4 @@
-package CypherGram.transposition.Utility;
+package cyphergram.transposition.utility.encrypt;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,10 @@ import java.util.Collections;
  * This assumes the input order is the path used i.e., first input item is the
  * first output item.
  *
+ * @param <T> Represents any Class type.
+ *
  * @author -Ry
- * @version 1.1
+ * @version 1.2
  * Copyright: N/A
  */
 public class GridPath<T> {
@@ -33,11 +35,11 @@ public class GridPath<T> {
 
     /**
      * Adds a co-ordinate to the top of the path (follows queue like
-     * implementation where n -> n+1 is the path.)
+     * implementation where n -> n+1 is the path).
      *
      * @param e Co-ordinate object which stores x, and y co-ordinates.
      */
-    public void addCoordinate(Coordinates<T> e) {
+    public void addCoordinate(final Coordinates<T> e) {
         path.add(e);
     }
 
@@ -53,7 +55,7 @@ public class GridPath<T> {
      *
      * @param e The provided path to update this path to.
      */
-    public void setPath(ArrayList<Coordinates<T>> e) {
+    public void setPath(final ArrayList<Coordinates<T>> e) {
         this.path = e;
     }
 
@@ -71,7 +73,7 @@ public class GridPath<T> {
     }
 
     /**
-     * Removes the top element from {@link #path}
+     * Removes the top element from {@link #path}.
      */
     public void removeTop() {
         this.path.remove(path.size() - 1);
@@ -84,7 +86,7 @@ public class GridPath<T> {
      * @param coord The coordinate to break the path up at, removing all
      *              after and including the provided cord from the pathing.
      */
-    public void removeCoordinate(Coordinates<T> coord) {
+    public void removeCoordinate(final Coordinates<T> coord) {
         int count = 0;
         for (Coordinates<T> temp : path) {
             if (temp.equals(coord)) {
@@ -101,8 +103,10 @@ public class GridPath<T> {
      *
      * @return -1 is the co-ordinates could not be found in the path. Else it
      * will return the index of the co-ordinate.
+     *
+     * @param input Co-ordinate to find the index for.
      */
-    public int getCoordinateIndex(Coordinates<T> input) {
+    public int getCoordinateIndex(final Coordinates<T> input) {
         int count = 0;
         for (Coordinates<T> temp : path) {
             if (temp.equals(input)) {
@@ -123,8 +127,10 @@ public class GridPath<T> {
     /**
      * @return {@code true} if the provided Co-ordinates are a in the Path
      * somewhere. else return {@code false}
+     *
+     * @param temp The co-ordinate to check to try and find.
      */
-    public boolean contains(Coordinates<T> temp) {
+    public boolean contains(final Coordinates<T> temp) {
         for (Coordinates<T> e : path) {
             if (e.equals(temp)) {
                 return true;
