@@ -20,8 +20,8 @@ public class GridPath {
      * Constant String error message used at: {@link #addPath(int[])} for
      * when {@link #isValidMinorPath(int[])} returns {@code false}.
      */
-    private static final String INVALID_PATH_ARRAY = "Provided Array does not" +
-            " meet the expected criteria...";
+    private static final String INVALID_PATH_ARRAY = "Provided Array does not"
+            + " meet the expected criteria...";
     /**
      * Path is stored as an ArrayList of Integer Arrays (Expected Array
      * format: Row, Col) and the path is designated by entry order to the
@@ -32,8 +32,8 @@ public class GridPath {
     /**
      * Adds the provided path to the Path Array if the provided path is valid.
      *
-     * @param minorPath The path to add to this GridPath. Expects an Array of size
-     *                  2 and format (row, col)
+     * @param minorPath The path to add to this GridPath. Expects an Array of
+     *                 size 2 and format (row, col)
      * @throws MalformedParametersException if the provided path is invalid.
      */
     public void addPath(final int[] minorPath)
@@ -87,7 +87,7 @@ public class GridPath {
      * @return {@code true} if the above holds. else if one does not hold
      * then the returned value is {@code false}.
      */
-    private boolean isValidMinorPath(int[] minorPath) {
+    public boolean isValidMinorPath(final int[] minorPath) {
         //Setup data
         final int rowIndex = 0;
         final int colIndex = 1;
@@ -106,29 +106,61 @@ public class GridPath {
      * Breaks the currently stored path at the provided Minor Path,
      * effectively backtracking 'n' amount of nodes.
      * <p>
-     * Note: If the provided Path is not a member of this GridPath, then this
-     * call will do nothing but return {@code null}.
      *
      * @param minorPath The Minor Path to break this Grid Path at.
-     * @return A Sublist of removed/broken Path elements which is the provided
-     * minorPath to Array End. But if the provided path does not exist in the
-     * GridPath then {@code null} is returned.
      */
-    public ArrayList<int[]> breakPathAt(int[] minorPath) {
+    public void breakPathAt(final int[] minorPath) {
         int minorPathIndex = this.indexOfMinorPath(minorPath);
-        final int maxIndex = this.fullPath.size() - 1;
+        final int maxIndex = this.fullPath.size();
         final int minimumIndex = 0;
 
-        //TODO Fix this
         //Ensure Path contains provided minorPath
         if (minorPathIndex >= minimumIndex) {
             List<int[]> brokenElements = this.fullPath.subList(minorPathIndex,
                     maxIndex);
-            this.fullPath.removeAll(new ArrayList<>(brokenElements));
-            return new ArrayList<>(brokenElements);
+            removeAllEquivalent(brokenElements);
+        }
+    }
+
+    /**
+     * Removes all equivalent int[] from the current GridPath. (Will remove
+     * if and only if {@link #pathContains} returns {@code true}).
+     *
+     * @param minorPaths The elements to remove from the path if they are in
+     *                   the path.
+     */
+    private void removeAllEquivalent(final List<int[]> minorPaths) {
+        ArrayList<int[]> elementsToDelete = new ArrayList<>();
+
+        //Find elements to delete
+        for (int[] minorPath : minorPaths) {
+            if (this.pathContains(minorPath)) {
+                elementsToDelete.add(minorPath);
+            }
         }
 
-        return null;
+        this.fullPath.removeAll(elementsToDelete);
+    }
+
+    /**
+     * @param minorPath The minor path to check for existence inside of
+     *                  {@link #fullPath}
+     * @return {@code true} if the provided minor path matches a minor path
+     * in the full path array. (If {@link #isMinorPathEqual(int[], int[])})
+     * yields {@code true} for at least one of 'n' inside of {@link #fullPath}.
+     * <p><br>
+     * Note: this is O(n) for time complexity as ordering and other
+     * optimisations are NOT done.
+     */
+    public boolean pathContains(final int[] minorPath) {
+        //Doesn't order the Array so time complexity is O(n)
+        for (int[] thisMinorPath : this.fullPath) {
+            if (this.isMinorPathEqual(minorPath, thisMinorPath)) {
+                return true;
+            }
+        }
+        //Default exit
+        return false;
     }
 
     /**
@@ -142,7 +174,7 @@ public class GridPath {
      * position on a grid. (Cartesian Co-ordinates are equal). else will
      * return {@code false}.
      */
-    public boolean isMinorPathEqual(int[] minorA, int[] minorB) {
+    public boolean isMinorPathEqual(final int[] minorA, final int[] minorB) {
         final int rowIndex = 0;
         final int colIndex = 1;
         //Ensure they're valid Minor Paths

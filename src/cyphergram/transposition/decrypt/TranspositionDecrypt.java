@@ -19,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -350,13 +349,36 @@ public class TranspositionDecrypt {
     /**
      * Updates the provided GridLabel to whatever it needs to be, determined
      * upon by the state of the Grid.
+     * <p>
+     * Note this also does:
+     * <p>
+     * If the triggered {@link Label} is already in the {@code
+     * Default-State} then it just updates the text to either use the
+     * {@code Pad-Key} or directly use a value from
+     * {@link #cypherText} which this value is determined via
+     * {@link StringIterator#next()}. Then finally for the {@code
+     * Label} the {@code CSS-ID} is changed to {@code
+     * buttonGridClicked}. Then externally the {@link #gridPath} is
+     * updated via {@link GridPath#addPath(int[])} using the Path
+     * Index for the triggered Label.
+     * </p>
+     * <p>
+     * But if the Label is not in the Default State then
+     * {@link #resetLabelDefaults(Label)} is called on the Provided
+     * label to put it back into the Default state, then the
+     * {@link #gridPath} is updated, once the Grid Path is updated, all
+     * labels not on the {@link #gridPath} are reset to their default states.
+     * </p>
+     *
+     * @param label The label which was clicked and is the basis for which
+     *              state the program should now be in.
      */
     private void updateGridLabel(final Label label) {
         if (isDefaultLabel(label)) {
             //Collect label text
-            String text = " ";
+            String text = "";
             if (cypherTextIterator.hasNext()) {
-                cypherTextIterator.next();
+                text = cypherTextIterator.next();
             }
             text = text.replaceAll(" ", padKey.getText());
 
@@ -368,41 +390,83 @@ public class TranspositionDecrypt {
             gridPath.addPath(gridState.getNodeIndex(label));
         } else {
             //Set label text to default text
-            int[] defaultLabelVal = gridState.getNodeIndex(label);
-            label.setText(String.format("(%s, %s)", defaultLabelVal[0],
-                    defaultLabelVal[1]));
+            resetLabelDefaults(label);
 
-            //Update GridPath
-            ArrayList<int[]> brokenIndexes =
-                    gridPath.breakPathAt(defaultLabelVal);
-            if (brokenIndexes != null) {
-                brokenIndexes.forEach(this::fixBrokenLabelFromIndex);
-            }
+            //Update GridPath (Note a copy of the original path must be made
+            // due to Concurrent Modification Issues)
+            ArrayList<int[]> curFullPath =
+                    new ArrayList<>(gridPath.getFullPath());
+            this.gridPath.breakPathAt(gridState.getNodeIndex(label));
+            curFullPath.removeAll(gridPath.getFullPath());
+            fixDetachedLabels(curFullPath);
+
+            //Repair String Iterator
+            cypherTextIterator = repairCypherIterator();
         }
     }
 
     /**
-     * Resets the Label at the index provided to its default state.
+     * Resets all Converts each Minor Path inside of the Provided full path
+     * to Labels and then passes them through to
+     * {@link #resetLabelDefaults(Label)} so that they can be reset.
      *
-     * @param minorPath The index pointing to a node in {@link #gridPath}.
+     * @param fullPath The path to follow and search for inside of
+     * {@link #gridPath} which contains a 2D Array of {@link Node} Objects.
      */
-    private void fixBrokenLabelFromIndex(final int[] minorPath) {
-        final int rowIndex = 0;
-        final int colIndex = 1;
-        Label e = (Label) gridState.getNodeAt(minorPath);
-        //Ensure node at provided Minor Path Index exists.
-        if (e != null) {
-            e.setId("buttonGrid");
-            e.setText(String.format("(%s, %s)", minorPath[rowIndex],
-                    minorPath[colIndex]));
+    private void fixDetachedLabels(final ArrayList<int[]> fullPath) {
+        ArrayList<Node> pathLabels =
+                this.gridState.getCellContentFromPath(fullPath);
+
+        for (Node e : pathLabels) {
+            Label temp = (Label) e;
+            resetLabelDefaults(temp);
         }
+    }
+
+    /**
+     * Resets the provided GridLabel to its default text index value. "(Row,
+     * Col)". Also re-assigns the CSS ID for this object.
+     *
+     * @param label The label to reset to default.
+     */
+    private void resetLabelDefaults(final Label label) {
+        int[] defaultLabelVal = gridState.getNodeIndex(label);
+        label.setText(String.format("(%s, %s)", defaultLabelVal[0],
+                defaultLabelVal[1]));
+        label.setId("buttonGrid");
+    }
+
+
+    /**
+     * Iterates through the Current GridPath fixing the CypherText Iterator
+     * to accommodate when a label is de-selected.
+     *
+     * @return String iterator, up-to the point in which the GridPath is broken.
+     */
+    private StringIterator repairCypherIterator() {
+        StringIterator newIterator =
+                new StringIterator(cypherTextIterator.toString());
+
+        for (int[] minorPath : gridPath.getFullPath()) {
+            Label e = (Label) gridState.getNodeAt(minorPath);
+            if (!isDefaultLabel(e)) {
+                newIterator.next();
+            } else {
+                return newIterator;
+            }
+        }
+        return newIterator;
     }
 
     /**
      * Checks to see if the provided label has the Default text format of "
-     * (x, y)" where x, y are integers/doubles
+     * (x, y)" where x, y are integers/doubles.
      *
      * @param label The label to check for Default text on.
+     *
+     * @return {@code true} if the {@link Label#getText()} returns a String
+     * matching {@code ^\([0-9]+.*[0-9]+\)$} -> "(x, y)". Else this method
+     * will return {@code false}.
      */
     private boolean isDefaultLabel(final Label label) {
         //Pattern matches "(x, y)"

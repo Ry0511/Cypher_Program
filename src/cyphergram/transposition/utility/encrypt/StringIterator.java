@@ -12,7 +12,15 @@ import java.util.NoSuchElementException;
  * Copyright: N/A
  */
 public class StringIterator implements java.util.Iterator<String> {
+    /**
+     * This is the String to Iterate through, char by char.
+     */
     private final String text;
+
+    /**
+     * This is the index counter which determines which character we should
+     * return when {@link #next()} or {@link #previous} are called.
+     */
     private int index;
 
     /**
@@ -21,9 +29,17 @@ public class StringIterator implements java.util.Iterator<String> {
      *
      * @param cypher Input text to be iterated through.
      */
-    public StringIterator(String cypher) {
+    public StringIterator(final String cypher) {
         this.text = cypher;
         this.index = 0;
+    }
+
+    /**
+     * @return The Full String provided at Iterator construction. {@link #text}
+     */
+    @Override
+    public String toString() {
+        return this.text;
     }
 
     /**
@@ -73,7 +89,7 @@ public class StringIterator implements java.util.Iterator<String> {
     }
 
     /**
-     * Returns {@code true} if the Iterator has a previous element (index can
+     * @return {@code true} if the Iterator has a previous element (index can
      * be sent backwards) to find an element in the String. Else this will
      * return {@code false}.
      */

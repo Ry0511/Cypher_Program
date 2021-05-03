@@ -6,6 +6,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
+import java.util.ArrayList;
+
 /**
  * Takes in a GridPane and assigns states to this object which relate to the
  * GridPane such as the number of Rows, Columns, Content and so on.
@@ -22,7 +24,7 @@ public class GridState {
 
     /**
      * The elements held in the GridPane...
-     *
+     * <p>
      * Note The Following:
      * <ul>
      *     <li>This assumes that the GridPane is empty upon creation.</li>
@@ -139,7 +141,10 @@ public class GridState {
     }
 
     /**
-     *
+     * @param node The node to look for and get the index of.
+     * @return Int array of (Row, Col) indicating the position of the Node by
+     * its cartesian co-ordinates. If the Node could not be found then the
+     * returned Array is of size Zero.
      */
     public int[] getNodeIndex(final Node node) {
         for (int row = 0; row < getRowCount(); row++) {
@@ -154,14 +159,56 @@ public class GridState {
     }
 
     /**
-     *
+     * @param nodeIndex Index value of a Node in {@link #gridCellContent}.
+     * @return The node at the provided index if provided path is in range.
+     * else it will return {@code null}.
      */
-    public Node getNodeAt(int[] nodeIndex) {
+    public Node getNodeAt(final int[] nodeIndex) {
         int rowIndex = 0;
         int colIndex = 1;
-        if (nodeIndex.length < gridCellContent.length) {
+        GridPath e = new GridPath();
+        if (e.isValidMinorPath(nodeIndex)) {
             return gridCellContent[nodeIndex[rowIndex]][nodeIndex[colIndex]];
         }
         return null;
+    }
+
+    /**
+     * Attempts to add all valid Minor Paths from {@link #gridCellContent},
+     * regardless of if the Cell content is {@code null} or not.
+     *
+     * Note:
+     * <ul>
+     *     <li>Will return the Cell content at of all valid minor paths (if
+     *     some are not valid they will be skipped)</li>
+     *     <li>Index values are only checked via
+     *     {@link GridPath#isValidMinorPath(int[])} which means that some
+     *     values can be above the Cell value size.</li>
+     *     <li>An ArrayList is returned regardless of if the input
+     *     parameters are invalid.</li>
+     * </ul>
+     *
+     * @param fullPath The full path to add cell content from.
+     * @return An ArrayList of all the cell which hold true to the above
+     * listed.
+     *
+     */
+    public ArrayList<Node> getCellContentFromPath(final ArrayList<int[]>
+                                                          fullPath) {
+        GridPath e = new GridPath();
+        ArrayList<Node> cellContent = new ArrayList<>();
+        final int rowIndex = 0;
+        final int colIndex = 1;
+
+        //Grab all minor paths which are valid
+        for (int[] minorPath : fullPath) {
+            if (e.isValidMinorPath(minorPath)) {
+                final int row = minorPath[rowIndex];
+                final int col = minorPath[colIndex];
+                cellContent.add(this.gridCellContent[row][col]);
+            }
+        }
+
+        return cellContent;
     }
 }
