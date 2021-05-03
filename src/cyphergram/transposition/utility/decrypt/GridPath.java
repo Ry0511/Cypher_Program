@@ -33,7 +33,7 @@ public class GridPath {
      * Adds the provided path to the Path Array if the provided path is valid.
      *
      * @param minorPath The path to add to this GridPath. Expects an Array of
-     *                 size 2 and format (row, col)
+     *                  size 2 and format (row, col)
      * @throws MalformedParametersException if the provided path is invalid.
      */
     public void addPath(final int[] minorPath)

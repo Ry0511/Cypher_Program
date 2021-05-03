@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 /**
  * Default JavaFX main initialiser.
  *
@@ -26,7 +27,7 @@ public class Main extends Application {
      * Start the GUI program.
      *
      * @param primaryStage The default stage produced from
-     * {@link #launch(String...)}
+     *                     {@link #launch(String...)}
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {

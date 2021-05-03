@@ -176,7 +176,7 @@ public class GridState {
     /**
      * Attempts to add all valid Minor Paths from {@link #gridCellContent},
      * regardless of if the Cell content is {@code null} or not.
-     *
+     * <p>
      * Note:
      * <ul>
      *     <li>Will return the Cell content at of all valid minor paths (if
@@ -191,7 +191,6 @@ public class GridState {
      * @param fullPath The full path to add cell content from.
      * @return An ArrayList of all the cell which hold true to the above
      * listed.
-     *
      */
     public ArrayList<Node> getCellContentFromPath(final ArrayList<int[]>
                                                           fullPath) {
@@ -210,5 +209,26 @@ public class GridState {
         }
 
         return cellContent;
+    }
+
+    /**
+     * Reads from Top Left to Top Right and adds the Node at the indexes
+     * which aren't {@code null}. ((0,0) -> (0,1))
+     *
+     * @return ArrayList of the Cell Content Nodes gathered in the Natural
+     * Order or appearance.
+     */
+    public ArrayList<Node> getCellContentNaturalOrder() {
+        final ArrayList<Node> content = new ArrayList<>();
+
+        for (int row = 0; row < this.getRowCount(); row++) {
+            for (int col = 0; col < this.getColCount(); col++) {
+                if (gridCellContent[row][col] != null) {
+                    content.add(gridCellContent[row][col]);
+                }
+            }
+        }
+
+        return content;
     }
 }

@@ -13,12 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -28,7 +31,7 @@ import java.util.regex.Pattern;
  * Previous Path, and Previous Pad Key.
  *
  * @author -Ry
- * @version 0.1
+ * @version 0.5
  * Copyright: N/A
  */
 public class TranspositionDecrypt {
@@ -46,6 +49,13 @@ public class TranspositionDecrypt {
      * Controlled/used: {@link #padKeyUpdated(KeyEvent)}
      */
     private static final String SINGLE_CHAR_ONLY = "One Char Only!";
+
+    /**
+     * Encrypted text label which is defaulted to "?" as placeholder text;
+     * This is used and updated to whatever the Encrypted message should be.
+     */
+    @FXML
+    private Label encryptedTextLabel;
 
     /**
      * Go button which once pressed will check if the grid should be updated,
@@ -150,6 +160,32 @@ public class TranspositionDecrypt {
         };
         Thread temp = new Thread(e);
         temp.start();
+    }
+
+    /**
+     * Updates the provided Label text to the provided set of Nodes (Label
+     * Casting), text.
+     *
+     * @param target The target label to update the text of.
+     * @param nodes  The set of nodes which will be casted to labels and have
+     *               the text grabbed from.
+     * @param test Will be removed once I find a more viable solution.
+     */
+    private static void updateLabelText(final Label target,
+                                        final ArrayList<Node> nodes,
+                                        final Function<Label, Boolean> test) {
+        //TODO Clean this up, also note thread creation leads to Exceptions.
+        Runnable runnable = () -> {
+            StringBuilder sb = new StringBuilder();
+            for (Node node : nodes) {
+                Label label = (Label) node;
+                if (label != null && !test.apply(label)) {
+                    sb.append(label.getText());
+                }
+            }
+            target.setText(sb.toString());
+        };
+        runnable.run();
     }
 
     /**
@@ -343,7 +379,45 @@ public class TranspositionDecrypt {
             updateGridLabel(e);
         }
 
+        updateTextLabels();
         System.out.println("Current Path: " + gridPath.toString());
+    }
+
+    /**
+     * Makes to calls to update {@link #encryptedTextLabel} and the
+     * {@link #decryptedTextLabel} Does through a call to
+     * {@link #updateLabelText(Label, ArrayList, Function)} though this might
+     * be changed later, due to how direct it actually is.
+     *
+     * @since 0.5
+     */
+    private void updateTextLabels() {
+        updateCypherText(this.gridState.getCellContentNaturalOrder());
+        updateDecryptedText(this.gridState.getCellContentFromPath(
+                this.gridPath.getFullPath()));
+    }
+
+    /**
+     * @param cellContentNatural Natural Order Collection of Nodes from the
+     * {@link #gridState}.
+     */
+    private void updateCypherText(final ArrayList<Node> cellContentNatural) {
+        updateLabelText(this.encryptedTextLabel, cellContentNatural,
+                this::isDefaultLabel);
+    }
+
+    /**
+     * Updates the Decrypted Text label to use what the currently Decrypted
+     * text should be.
+     *
+     * @param cellContentPath This is a list of Nodes following the
+     * {@link #gridPath} mapping each Minor Path to a Cell inside of
+     * {@link #gridState}.
+     */
+    private void updateDecryptedText(final ArrayList<Node> cellContentPath) {
+        //TODO Map Current path through CypherText. (Decrypt in real time)
+        updateLabelText(this.decryptedTextLabel, cellContentPath,
+                this::isDefaultLabel);
     }
 
     /**
@@ -411,7 +485,8 @@ public class TranspositionDecrypt {
      * {@link #resetLabelDefaults(Label)} so that they can be reset.
      *
      * @param fullPath The path to follow and search for inside of
-     * {@link #gridPath} which contains a 2D Array of {@link Node} Objects.
+     *                 {@link #gridPath} which contains a 2D Array of
+     *                 {@link Node} Objects.
      */
     private void fixDetachedLabels(final ArrayList<int[]> fullPath) {
         ArrayList<Node> pathLabels =
@@ -463,7 +538,6 @@ public class TranspositionDecrypt {
      * (x, y)" where x, y are integers/doubles.
      *
      * @param label The label to check for Default text on.
-     *
      * @return {@code true} if the {@link Label#getText()} returns a String
      * matching {@code ^\([0-9]+.*[0-9]+\)$} -> "(x, y)". Else this method
      * will return {@code false}.
@@ -490,5 +564,18 @@ public class TranspositionDecrypt {
      */
     private void programStateNotReady() {
         //TODO
+    }
+
+    /**
+     * Copies the text from the triggered event after casting it to a Label.
+     *
+     * @param event Event trigger.
+     */
+    public void copyText(MouseEvent event) {
+        Label temp = (Label) event.getSource();
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(temp.getText());
+        clipboard.setContent(content);
     }
 }
