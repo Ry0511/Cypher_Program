@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" name="TranspositionCipher">
-    <output-path>$PROJECT_DIR$/out/artifacts/TranspositionCipher</output-path>
+  <artifact type="javafx" name="CypherGram">
+    <output-path>$PROJECT_DIR$/out/artifacts/CypherGram</output-path>
     <properties id="javafx-properties">
       <options>
-        <option name="appClass" value="sample.Main" />
+        <option name="appClass" value="cyphergram.Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
         <option name="nativeBundle" value="all" />
@@ -13,7 +13,7 @@
       </options>
     </properties>
     <root id="root">
-      <element id="archive" name="JavaFX_Autosize_Elements.jar">
+      <element id="archive" name="CypherGram.jar">
         <element id="module-output" name="CypherGram" />
       </element>
     </root>
