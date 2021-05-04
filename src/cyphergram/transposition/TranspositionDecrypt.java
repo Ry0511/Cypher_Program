@@ -1,9 +1,6 @@
-package cyphergram.transposition.decrypt;
+package cyphergram.transposition;
 
-import cyphergram.transposition.utility.decrypt.CellStyle;
-import cyphergram.transposition.utility.decrypt.GridPath;
-import cyphergram.transposition.utility.decrypt.GridState;
-import cyphergram.transposition.utility.encrypt.StringIterator;
+import cyphergram.transposition.utility.transposition.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -277,12 +274,17 @@ public class TranspositionDecrypt {
      * Calculates the GridPane Size by taking into account all input
      * parameters such as {@link #invertKeyBox} and {@link #gridKey}.
      *
+     * Bug Fix: 04/05/2021 Added extra check as GridSize wasn't accounting
+     * for border size text.
+     *
      * @return Two positive integers (Zero included) in an Array referencing
      * Row, Col. (Index 0 == Rows).
      */
     private int[] calculateGridSize() {
-        final int rows;
-        final int columns;
+        int rows;
+        int columns;
+        final int inputSize = cypherText.getText().length();
+
         //Inverted: Row = Col.
         if (invertKeyBox.isSelected()) {
             columns = Integer.parseInt(gridKey.getText());
@@ -303,6 +305,13 @@ public class TranspositionDecrypt {
             } else {
                 columns = cypherText.getText().length();
             }
+        }
+
+        //Covers case of GridSize being too small
+        if (invertKeyBox.isSelected()) {
+            columns = (columns * rows) < inputSize ? columns + 1 : columns;
+        } else {
+            rows = (rows * columns) < inputSize ? rows + 1 : rows;
         }
 
         //NOTE ITS ALWAYS (ROW, COL); Just referenced values may be flipped.
@@ -393,8 +402,7 @@ public class TranspositionDecrypt {
      */
     private void updateTextLabels() {
         updateCypherText(this.gridState.getCellContentNaturalOrder());
-        updateDecryptedText(this.gridState.getCellContentFromPath(
-                this.gridPath.getFullPath()));
+        updateDecryptedText();
     }
 
     /**
@@ -410,14 +418,14 @@ public class TranspositionDecrypt {
      * Updates the Decrypted Text label to use what the currently Decrypted
      * text should be.
      *
-     * @param cellContentPath This is a list of Nodes following the
-     * {@link #gridPath} mapping each Minor Path to a Cell inside of
-     * {@link #gridState}.
      */
-    private void updateDecryptedText(final ArrayList<Node> cellContentPath) {
-        //TODO Map Current path through CypherText. (Decrypt in real time)
-        updateLabelText(this.decryptedTextLabel, cellContentPath,
-                this::isDefaultLabel);
+    private void updateDecryptedText() {
+        final String base = cypherTextIterator.toString();
+        final String pad = padKey.getText();
+        final int rows = gridState.getRowCount();
+        final int cols = gridState.getColCount();
+        TranspositionCypher e = new TranspositionCypher(base, pad, rows, cols);
+        decryptedTextLabel.setText(e.decryptWithPath(gridPath.getFullPath()));
     }
 
     /**
@@ -571,7 +579,7 @@ public class TranspositionDecrypt {
      *
      * @param event Event trigger.
      */
-    public void copyText(MouseEvent event) {
+    public void copyText(final MouseEvent event) {
         Label temp = (Label) event.getSource();
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();

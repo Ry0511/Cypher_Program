@@ -1,4 +1,4 @@
-package cyphergram.transposition.utility.decrypt;
+package cyphergram.transposition.utility.transposition;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;

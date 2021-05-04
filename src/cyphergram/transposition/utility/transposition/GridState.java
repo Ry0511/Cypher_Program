@@ -1,4 +1,4 @@
-package cyphergram.transposition.utility.decrypt;
+package cyphergram.transposition.utility.transposition;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;

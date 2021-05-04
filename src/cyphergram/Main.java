@@ -18,6 +18,8 @@ public class Main extends Application {
 
     /**
      * Main method just runs {@link #launch(String...)}.
+     *
+     * @param args Command Line Args
      */
     public static void main(final String[] args) {
         launch(args);
@@ -31,10 +33,9 @@ public class Main extends Application {
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        final String fxmlFile = "transposition/encrypt/transpositionEncrypt"
-                + ".fxml";
+        final String fxmlFile = "transposition/transposition.fxml";
         Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
-        primaryStage.setTitle("cyphergram");
+        primaryStage.setTitle("CypherGram");
 
         final int defaultWidth = 1280;
         final int defaultHeight = 768;

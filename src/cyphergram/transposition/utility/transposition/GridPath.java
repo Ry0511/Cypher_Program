@@ -1,4 +1,4 @@
-package cyphergram.transposition.utility.decrypt;
+package cyphergram.transposition.utility.transposition;
 
 import java.lang.reflect.MalformedParametersException;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Recreation of the
- * {@link cyphergram.transposition.utility.encrypt.GridPath} class but with less
+ * {@link old.GridPath} class but with less
  * "free-balling-it" aspects since I eye-balled 100% of that Class and don't
  * want to look at it.
  *

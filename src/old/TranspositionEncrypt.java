@@ -1,10 +1,7 @@
-package cyphergram;
+package old;
 
 import cyphergram.transposition.utility.general.SceneUtils;
-import cyphergram.transposition.utility.encrypt.Coordinates;
-import cyphergram.transposition.utility.encrypt.GridPath;
-import cyphergram.transposition.utility.encrypt.LabelProperties;
-import cyphergram.transposition.utility.encrypt.StringIterator;
+import cyphergram.transposition.utility.transposition.StringIterator;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +11,9 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
@@ -391,7 +390,7 @@ public class TranspositionEncrypt {
     public void decryptBoard() throws IOException {
         //Stage data
         final String title = "Decrypt Transposition";
-        final String fxml = "transposition/decrypt/decryptPage.fxml";
+        final String fxml = "transposition/decrypt/transposition.fxml";
         final Parent root = FXMLLoader.load(getClass().getResource(fxml));
 
         //Stage setup
