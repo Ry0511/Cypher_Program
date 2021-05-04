@@ -15,17 +15,29 @@
                <FlowPane.margin>
                   <Insets />
                </FlowPane.margin>
+               <tooltip>
+                  <Tooltip text="The text to Encrypt/Decrypt" />
+               </tooltip>
             </TextField>
-            <TextField fx:id="padKey" minHeight="0.0" minWidth="0.0" onKeyTyped="#padKeyUpdated" prefHeight="30.0" prefWidth="110.0" promptText="Pad Key" />
+            <TextField fx:id="padKey" minHeight="0.0" minWidth="0.0" onKeyTyped="#padKeyUpdated" prefHeight="30.0" prefWidth="110.0" promptText="Pad Key">
+               <tooltip>
+                  <Tooltip text="PadKey which is used for Spaces and blank grid spots" />
+               </tooltip></TextField>
             <TextField fx:id="gridKey" alignment="CENTER" minHeight="0.0" minWidth="0.0" onKeyTyped="#keyTextUpdated" prefHeight="30.0" prefWidth="110.0" promptText="Key">
                <FlowPane.margin>
                   <Insets />
                </FlowPane.margin>
+               <tooltip>
+                  <Tooltip text="The minimum number of Rows to use. (Invert for Columns)" />
+               </tooltip>
             </TextField>
             <CheckBox fx:id="invertKeyBox" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" prefHeight="30.0" text="Invert Key" textAlignment="CENTER">
                <padding>
                   <Insets right="12.0" />
-               </padding></CheckBox>
+               </padding>
+               <tooltip>
+                  <Tooltip text="Make the Key refer to Columns instead of Rows." />
+               </tooltip></CheckBox>
             <Button fx:id="goButton" alignment="CENTER" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#goButtonPressed" prefHeight="30.0" prefWidth="70.0" text="Go!" textAlignment="CENTER" />
          </children>
          <styleClass>

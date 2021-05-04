@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * Previous Path, and Previous Pad Key.
  *
  * @author -Ry
- * @version 0.5
+ * @version 0.6
  * Copyright: N/A
  */
 public class TranspositionDecrypt {
@@ -425,7 +425,8 @@ public class TranspositionDecrypt {
         final int rows = gridState.getRowCount();
         final int cols = gridState.getColCount();
         TranspositionCypher e = new TranspositionCypher(base, pad, rows, cols);
-        decryptedTextLabel.setText(e.decryptWithPath(gridPath.getFullPath()));
+        String text = e.decryptWithPath(gridPath.getFullPath());
+        decryptedTextLabel.setText(text.replaceAll(this.padKey.getText(), " "));
     }
 
     /**
