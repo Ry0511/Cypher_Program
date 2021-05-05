@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * Previous Path, and Previous Pad Key.
  *
  * @author -Ry
- * @version 0.6
+ * @version 0.7
  * Copyright: N/A
  */
 public class TranspositionDecrypt {
@@ -277,6 +277,9 @@ public class TranspositionDecrypt {
      * Bug Fix: 04/05/2021 Added extra check as GridSize wasn't accounting
      * for border size text.
      *
+     * Bug Fix: 05/05/2021 Changed GridSize calculation to use Modulus as
+     * raw division was causing incorrect GridSizes
+     *
      * @return Two positive integers (Zero included) in an Array referencing
      * Row, Col. (Index 0 == Rows).
      */
@@ -285,33 +288,17 @@ public class TranspositionDecrypt {
         int columns;
         final int inputSize = cypherText.getText().length();
 
-        //Inverted: Row = Col.
+        //Inverted means key refers to columns
         if (invertKeyBox.isSelected()) {
             columns = Integer.parseInt(gridKey.getText());
+            rows = inputSize / columns;
+            rows = (inputSize % columns != 0) ? rows + 1 : rows;
 
-            //Avoid divide by zero
-            if (columns > 0) {
-                rows = cypherText.getText().length() / columns;
-            } else {
-                rows = cypherText.getText().length();
-            }
+            //Key default is referring to rows
         } else {
-            //Normal: Row = Row.
             rows = Integer.parseInt(gridKey.getText());
-
-            //Avoid divide by zero
-            if (rows > 0) {
-                columns = cypherText.getText().length() / rows;
-            } else {
-                columns = cypherText.getText().length();
-            }
-        }
-
-        //Covers case of GridSize being too small
-        if (invertKeyBox.isSelected()) {
-            columns = (columns * rows) < inputSize ? columns + 1 : columns;
-        } else {
-            rows = (rows * columns) < inputSize ? rows + 1 : rows;
+            columns = inputSize / rows;
+            columns = (inputSize % rows != 0) ? columns + 1 : columns;
         }
 
         //NOTE ITS ALWAYS (ROW, COL); Just referenced values may be flipped.
@@ -389,7 +376,6 @@ public class TranspositionDecrypt {
         }
 
         updateTextLabels();
-        System.out.println("Current Path: " + gridPath.toString());
     }
 
     /**
@@ -459,7 +445,7 @@ public class TranspositionDecrypt {
     private void updateGridLabel(final Label label) {
         if (isDefaultLabel(label)) {
             //Collect label text
-            String text = "";
+            String text = " ";
             if (cypherTextIterator.hasNext()) {
                 text = cypherTextIterator.next();
             }
