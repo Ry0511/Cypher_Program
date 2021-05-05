@@ -1,5 +1,4 @@
 # Cypher_Program
-Was learning and messing around with JavaFX to create a program. Also note the code is an absolute mess because I was mainly testing. (Removed the old codebase, still a mess)
 
 Usage for Transposition:
 
