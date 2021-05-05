@@ -166,7 +166,7 @@ public class TranspositionDecrypt {
      * @param target The target label to update the text of.
      * @param nodes  The set of nodes which will be casted to labels and have
      *               the text grabbed from.
-     * @param test Will be removed once I find a more viable solution.
+     * @param test   Will be removed once I find a more viable solution.
      */
     private static void updateLabelText(final Label target,
                                         final ArrayList<Node> nodes,
@@ -273,10 +273,10 @@ public class TranspositionDecrypt {
     /**
      * Calculates the GridPane Size by taking into account all input
      * parameters such as {@link #invertKeyBox} and {@link #gridKey}.
-     *
+     * <p>
      * Bug Fix: 04/05/2021 Added extra check as GridSize wasn't accounting
      * for border size text.
-     *
+     * <p>
      * Bug Fix: 05/05/2021 Changed GridSize calculation to use Modulus as
      * raw division was causing incorrect GridSizes
      *
@@ -393,7 +393,7 @@ public class TranspositionDecrypt {
 
     /**
      * @param cellContentNatural Natural Order Collection of Nodes from the
-     * {@link #gridState}.
+     *                           {@link #gridState}.
      */
     private void updateCypherText(final ArrayList<Node> cellContentNatural) {
         updateLabelText(this.encryptedTextLabel, cellContentNatural,
@@ -403,7 +403,6 @@ public class TranspositionDecrypt {
     /**
      * Updates the Decrypted Text label to use what the currently Decrypted
      * text should be.
-     *
      */
     private void updateDecryptedText() {
         final String base = cypherTextIterator.toString();
